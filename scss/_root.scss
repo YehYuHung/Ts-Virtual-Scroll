@@ -1,0 +1,5 @@
+:root {
+  @each $color, $value in $colors {
+    --#{$variable-prefix}-#{$color}: #{$value};
+  }
+}

@@ -1,0 +1,38 @@
+// Variables
+//
+// iminate structure like bootstap style
+
+// scss docs color-start
+
+$pink: #f719d6 !default;
+$red: #c3353c !default;
+$orange: #da934c !default;
+$yellow: #67970d !default;
+$green: #09d82d !default;
+$blue: #2a09e1 !default;
+$indigo: #35cbf2 !default;
+$violet: #a716d3 !default;
+$purple: #7126f5 !default;
+
+// scss docs color-end
+
+// scss docs color-map-start
+
+$colors: (
+  "red": $red,
+  "orange": $orange,
+  "yellow": $yellow,
+  "green": $green,
+  "blue": $blue,
+  "indigo": $indigo,
+  "violet": $violet,
+  "purple": $purple,
+) !default;
+
+// scss docs color-map-end
+
+// :root CSS variables Prefix start
+
+$variable-prefix: bs- !default;
+
+// :root CSS variables Prefix end
