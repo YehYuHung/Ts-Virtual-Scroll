@@ -1,11 +1,11 @@
 {
   "name": "ts-virtual-scroll",
+  "type": "module",
   "version": "1.0.0",
   "description": "Normal TypeScript Package Generate Virtual scroll.",
   "main": "dist/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsc && sass ./scss:./dist/css",
+    "build": "rmdir /s /q dist && tsc --target ES6 --module ES6 --declaration && sass ./scss:./dist/css",
     "start": "lite-server"
   },
   "keywords": [
