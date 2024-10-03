@@ -10,16 +10,16 @@
   </head>
   <body>
   
-  <div id="scroll-container" style="height: 200px;"></div>
-  
+  <div id="scroll-container" style="border: 5px solid black"></div>
+
   <script type="module">
     import { VirtualScroll } from './dist/js/scrollbar/scrollbar.js';
 
     const container = document.getElementById('scroll-container');
     const virtualScroll = new VirtualScroll({
       container: container,
-      itemHeight: 50,
-      totalItems: 10,
+      itemHeight: 40,
+      totalItems: 10000,
       bufferSize: 10
     });
   </script>
