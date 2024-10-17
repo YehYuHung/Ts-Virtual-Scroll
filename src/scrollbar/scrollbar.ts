@@ -28,7 +28,9 @@ export class VirtualScroll {
     this.totalHeight = this.totalItems * this.itemHeight;
     this.initScrollableDiv();
 
-    this.displayNums = Math.ceil(this.container.clientHeight / this.itemHeight) + 2 * this.paddingNode;
+    this.displayNums =
+      Math.ceil(this.container.clientHeight / this.itemHeight) +
+      2 * this.paddingNode;
 
     this.renderItems();
   }
@@ -39,6 +41,7 @@ export class VirtualScroll {
     this.scrollableDiv.style.height = `${this.totalHeight}px`;
     this.scrollableDiv.style.overflow = "hidden";
     this.scrollableDiv.style.transform = `translate3d(0px, 0px, 0px)`;
+    this.scrollableDiv.classList.add("mg-vs-inner");
 
     this.container.style.height = `${this.viewHeight}px`;
     this.container.style.overflow = "auto"; // 使 container 可以滾動
@@ -52,6 +55,7 @@ export class VirtualScroll {
     for (let i = this.startIndex; i < finalNums; i++) {
       const item = document.createElement("div");
       item.style.height = `${this.itemHeight}px`;
+      item.classList.add("mg-item");
       item.textContent = `Item ${i}`;
       this.items.push(item);
       this.scrollableDiv.appendChild(item); // 將項目加入 scrollableDiv
@@ -64,14 +68,15 @@ export class VirtualScroll {
 
   private addScrollEvent() {
     this.scrollTop = this.container.scrollTop;
-    if(this.scrollTop > this.itemHeight){
+    if (this.scrollTop > this.itemHeight) {
       this.startIndex = this.getStartNode();
       const scrollPanelHeight = this.startIndex * this.itemHeight;
       this.scrollableDiv.style.transform = `translate3d(0px, ${scrollPanelHeight}px, 0px)`;
-      this.scrollableDiv.style.height = `${this.totalHeight - scrollPanelHeight}px`;
+      this.scrollableDiv.style.height = `${
+        this.totalHeight - scrollPanelHeight
+      }px`;
       this.renderItems();
-    }
-    else {
+    } else {
       this.resetScrollHeight();
     }
   }
@@ -88,12 +93,15 @@ export class VirtualScroll {
   }
 
   private getStartNode() {
-    return Math.min(Math.floor(this.scrollTop / this.itemHeight),this.totalItems - this.displayNums);
+    return Math.min(
+      Math.floor(this.scrollTop / this.itemHeight),
+      this.totalItems - this.displayNums
+    );
   }
 
-  private emptyScrollDiv(){
+  private emptyScrollDiv() {
     while (this.scrollableDiv.firstElementChild) {
       this.scrollableDiv.firstElementChild.remove();
     }
-  }  
+  }
 }
