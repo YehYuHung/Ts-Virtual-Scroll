@@ -1,0 +1,26 @@
+@mixin ascending($map, $map-name){
+  $prev-key: null;
+  $prev-num: null;
+  @each $key, $num in $map {
+    @if $prev-num == null or unit($num) == "%" or unit($prev-num) == "%" {
+      
+    } @else if not comparable($prev-num, $num){
+      @warn "Invalid value for #{$map-name}: This map must be in ascending order, but those key are not comparable '#{prev-num}', '#{num}', previos key:'#{prev-key}'";
+    } @else if $prev-num >= $num{
+      @warn "Invalid value for #{$map-name}: This map must be in ascending order, but those value are not ascending order '#{prev-num}', '#{num}', previos key:'#{prev-key}'";
+    }
+
+    $prev-key: $key;
+    $prev-num: $num;
+  }
+}
+
+@mixin start-at-zero($map, $map-name: "$grid-brakpoints"){
+  @if length($map) > 0{
+    $values: map-values($map);
+    $first-value: nth($values, 1);
+    @if $first-value != 0 {
+      @warn "First breakpoint in #{map-name} must start at 0, but starts at #{first-value}.";
+    }
+  }
+}
