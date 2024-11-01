@@ -1,32 +1,45 @@
+export interface VirtualScrollItems {
+  name: string;
+  value?: string;
+  hasCheck?: boolean;
+}
+
 export interface VirtualScrollOptions {
   container: HTMLElement;
   itemHeight: number;
-  totalItems: number;
   viewHeight?: number;
   paddingNode?: number;
+  items?: VirtualScrollItems[];
+}
+
+export interface VirtualSettings {
+  isCheck: Boolean;
 }
 
 export class VirtualScroll {
   private container: HTMLElement;
-  private scrollableDiv!: HTMLElement;
+  private scrollpanel!: HTMLElement;
   private itemHeight: number;
   private totalItems: number;
   private viewHeight: number;
   private paddingNode: number;
   private displayNums: number;
   private totalHeight: number;
-  private items: HTMLElement[] = [];
+  private dataItems: VirtualScrollItems[] = [];
   private scrollTop: number = 0;
   private startIndex: number = 0;
+  private setting: VirtualSettings;
 
-  constructor(options: VirtualScrollOptions) {
+  constructor(options: VirtualScrollOptions, setting?: VirtualSettings) {
+    this.setting = { ...setting, ...VirtualScroll.DefaultSettings };
     this.container = options.container;
     this.itemHeight = options.itemHeight;
-    this.totalItems = options.totalItems;
+    this.dataItems = options.items ?? [];
+    this.totalItems = options.items?.length ?? 0;
     this.viewHeight = options.viewHeight ?? 200;
     this.paddingNode = options.paddingNode ?? 1;
     this.totalHeight = this.totalItems * this.itemHeight;
-    this.initScrollableDiv();
+    this.initscrollpanel();
 
     this.displayNums =
       Math.ceil(this.container.clientHeight / this.itemHeight) +
@@ -36,16 +49,16 @@ export class VirtualScroll {
   }
 
   // 初始化可滾動內層
-  private initScrollableDiv() {
-    this.scrollableDiv = document.createElement("div");
-    this.scrollableDiv.style.height = `${this.totalHeight}px`;
-    this.scrollableDiv.style.overflow = "hidden";
-    this.scrollableDiv.style.transform = `translate3d(0px, 0px, 0px)`;
-    this.scrollableDiv.classList.add("mg-vs-inner");
+  private initscrollpanel() {
+    this.scrollpanel = document.createElement("div");
+    this.scrollpanel.style.height = `${this.totalHeight}px`;
+    this.scrollpanel.style.overflow = "hidden";
+    this.scrollpanel.style.transform = `translate3d(0px, 0px, 0px)`;
+    this.scrollpanel.classList.add("mg-vs-inner");
 
     this.container.style.height = `${this.viewHeight}px`;
     this.container.style.overflow = "auto"; // 使 container 可以滾動
-    this.container.appendChild(this.scrollableDiv);
+    this.container.appendChild(this.scrollpanel);
     this.attachScrollListener();
   }
 
@@ -53,12 +66,13 @@ export class VirtualScroll {
     this.emptyScrollDiv();
     const finalNums = this.getFinalNode();
     for (let i = this.startIndex; i < finalNums; i++) {
+      const data = this.dataItems[i] ?? {};
       const item = document.createElement("div");
       item.style.height = `${this.itemHeight}px`;
       item.classList.add("mg-item");
-      item.textContent = `Item ${i}`;
-      this.items.push(item);
-      this.scrollableDiv.appendChild(item); // 將項目加入 scrollableDiv
+      item.textContent = data.name;
+      if (data.value) item.setAttribute("value", data.value);
+      this.scrollpanel.appendChild(item); // 將項目加入 scrollpanel
     }
   }
 
@@ -71,8 +85,8 @@ export class VirtualScroll {
     if (this.scrollTop > this.itemHeight) {
       this.startIndex = this.getStartNode();
       const scrollPanelHeight = this.startIndex * this.itemHeight;
-      this.scrollableDiv.style.transform = `translate3d(0px, ${scrollPanelHeight}px, 0px)`;
-      this.scrollableDiv.style.height = `${
+      this.scrollpanel.style.transform = `translate3d(0px, ${scrollPanelHeight}px, 0px)`;
+      this.scrollpanel.style.height = `${
         this.totalHeight - scrollPanelHeight
       }px`;
       this.renderItems();
@@ -83,8 +97,8 @@ export class VirtualScroll {
 
   private resetScrollHeight() {
     this.startIndex = 0;
-    this.scrollableDiv.style.transform = `translate3d(0px, 0px, 0px)`;
-    this.scrollableDiv.style.height = `${this.totalHeight}px`;
+    this.scrollpanel.style.transform = `translate3d(0px, 0px, 0px)`;
+    this.scrollpanel.style.height = `${this.totalHeight}px`;
     this.renderItems();
   }
 
@@ -100,8 +114,12 @@ export class VirtualScroll {
   }
 
   private emptyScrollDiv() {
-    while (this.scrollableDiv.firstElementChild) {
-      this.scrollableDiv.firstElementChild.remove();
+    while (this.scrollpanel.firstElementChild) {
+      this.scrollpanel.firstElementChild.remove();
     }
   }
+
+  static DefaultSettings: VirtualSettings = {
+    isCheck: false,
+  };
 }

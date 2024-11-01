@@ -1,15 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="author" content="Morga.Yeh" />
-    <meta name="description" content="Create normal virtualScroller" />
-    <title>Scroller Bar Component</title>
-    <link href="./dist/css/scrollbar.css" rel="stylesheet" />
-  </head>
-  <body>
-  
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="author" content="Morga.Yeh" />
+  <meta name="description" content="Create normal virtualScroller" />
+  <title>Scroller Bar Component</title>
+  <link href="./dist/css/scrollbar.css" rel="stylesheet" />
+</head>
+
+<body>
+
   <div id="scroll-container" style="border: 5px solid black"></div>
 
   <script type="module">
@@ -19,9 +21,9 @@
     const virtualScroll = new VirtualScroll({
       container: container,
       itemHeight: 40,
-      totalItems: 10000,
-      bufferSize: 10
+      items: Array.from({ length: 20000 }, (_, idx) => idx > 200 ? ({ name: `test-item${idx}`, hasCheck: true }) : ({ name: `mg-item${idx}` }))
     });
   </script>
-  </body>
+</body>
+
 </html>
